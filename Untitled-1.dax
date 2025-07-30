@@ -1,0 +1,79 @@
+//CENTURIES 
+
+Centuries = 
+
+VAR selectedseason = SELECTEDVALUE(ipl_matches_data[season])
+
+VAR seasondata = FILTER(ball_by_ball_data,
+                        RELATED(ipl_matches_data[season]) = selectedseason)
+
+
+
+
+VAR batterruns = 
+               SUMMARIZE(seasondata,ball_by_ball_data[match_id],
+                          ball_by_ball_data[batter],"TOTAL RUNS",SUM(ball_by_ball_data[batter_runs]))
+
+
+var centurycount = FILTER(batterruns,[TOTAL RUNS] >= 100)
+
+RETURN COUNTROWS(centurycount)
+
+// HALF CENTURIES
+
+half Centuries = 
+
+VAR selectedseason = SELECTEDVALUE(ipl_matches_data[season])
+
+VAR seasondata = FILTER(ball_by_ball_data,
+                        RELATED(ipl_matches_data[season]) = selectedseason)
+
+
+
+
+VAR batterruns = 
+                SUMMARIZE(seasondata,ball_by_ball_data[match_id],
+                          ball_by_ball_data[batter],"TOTAL RUNS",SUM(ball_by_ball_data[batter_runs]))
+
+
+var centurycount = FILTER(batterruns,[TOTAL RUNS] >= 50 && [TOTAL RUNS] < 100)
+
+RETURN COUNTROWS(centurycount)
+
+// TOTAL matches
+Total matches = CALCULATE(DISTINCTCOUNT(ipl_matches_data[match_id]))
+
+
+// TOTAL RUNS
+Total Runs = 
+
+VAR selectedseason = SELECTEDVALUE(ipl_matches_data[season])
+
+VAR seasondataonly = 
+                     FILTER(ball_by_ball_data,RELATED(ipl_matches_data[season]) = selectedseason)
+
+VAR runsummary = 
+                SUMMARIZE(seasondataonly,ball_by_ball_data[batter],"Total runs",SUM(ball_by_ball_data[batter_runs]))
+
+VAR maxruns = MAXX(runsummary,[Total runs])
+
+
+RETURN maxruns
+
+//TOTAL TEAMS
+
+Total teams = CALCULATE(DISTINCTCOUNT(ipl_matches_data[team1]))
+
+
+// TOTAL FOURS
+
+Total 4's = 
+CALCULATE(COUNTROWS(ball_by_ball_data),ball_by_ball_data[batter_runs] = 4,
+           KEEPFILTERS(VALUES(ipl_matches_data[season])))
+
+
+// TOTAL SIXES
+
+Total 6's = 
+CALCULATE(COUNTROWS(ball_by_ball_data),ball_by_ball_data[batter_runs] = 6,
+           KEEPFILTERS(VALUES(ipl_matches_data[season])))

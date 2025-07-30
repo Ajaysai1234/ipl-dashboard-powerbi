@@ -1,0 +1,39 @@
+// CHAMPIONS
+
+Season Winner = 
+VAR selectedseason = SELECTEDVALUE(ipl_matches_data[season])
+
+VAR finalmatchdate = CALCULATE(max(ipl_matches_data[match_date]),
+                               ipl_matches_data[season] = selectedseason )
+
+var finalmatchwinner = calculate(max(ipl_matches_data[match_winner]), 
+                                ipl_matches_data[season] = selectedseason,
+                                ipl_matches_data[match_date] = finalmatchdate)
+
+RETURN finalmatchwinner
+
+// RUNNER UP
+
+Runner up = 
+
+
+VAR selectedseason = SELECTEDVALUE(ipl_matches_data[season])
+
+VAR finalmatchdate = CALCULATE(max(ipl_matches_data[match_date]),
+                               ipl_matches_data[season] = selectedseason )
+
+var finalmatchwinner = calculate(max(ipl_matches_data[match_winner]), 
+                                ipl_matches_data[season] = selectedseason,
+                                ipl_matches_data[match_date] = finalmatchdate)
+
+
+VAR Team1 =  calculate(max(ipl_matches_data[team1]), 
+                                ipl_matches_data[season] = selectedseason,
+                                ipl_matches_data[match_date] = finalmatchdate)
+
+VAR Team2 =  calculate(max(ipl_matches_data[team2]), 
+                                ipl_matches_data[season] = selectedseason,
+                                ipl_matches_data[match_date] = finalmatchdate)
+
+RETURN
+IF(finalmatchwinner=Team1,Team2,Team1)
